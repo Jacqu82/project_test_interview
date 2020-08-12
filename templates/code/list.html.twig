@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h3>Generate Code</h3>
+
+    {{ form_start(form) }}
+    {{ form_row(form) }}
+    {{ form_end(form) }}
+
+    {% if codes is not empty %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Code(s)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for code in codes %}
+                <tr>
+                    <td>
+                        {{ code }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}
+
