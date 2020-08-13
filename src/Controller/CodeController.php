@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\CodeForm;
+use App\Provider\CodeProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CodeController extends AbstractController
 {
+    private $codeProvider;
+
+    public function __construct(CodeProvider $codeProvider)
+    {
+        $this->codeProvider = $codeProvider;
+    }
+
     /**
      * @Route("/generate/code", name="code_generate", methods={"GET","POST"})
      */
@@ -25,9 +33,11 @@ class CodeController extends AbstractController
         $codes = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $quantity = $form->get('quantity')->getData();
-            $length = $form->get('length')->getData();
-            $codes = $this->generateStringList($quantity, $length);
+            $codes = $this->codeProvider->generateRandomCodeList(
+                $form->get('length')->getData(),
+                $form->get('quantity')->getData(),
+                $form->get('type')->getData()
+            );
         }
 
         return $this->render(
@@ -37,27 +47,5 @@ class CodeController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
-    }
-
-    private function randomString(int $length): string
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, strlen($characters) - 1)];
-        }
-
-        return $randomString;
-    }
-
-    private function generateStringList(int $quantity = 1, int $length = 15): array
-    {
-        $list = [];
-        for ($i = 1; $i <= $quantity; $i++) {
-            $list[] = $this->randomString($length);
-        }
-
-        return $list;
     }
 }

@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\LessThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @author Jacek Wesołowski <jacqu25@yahoo.com>
@@ -23,8 +25,11 @@ class CodeForm extends AbstractType
                 'quantity',
                 IntegerType::class,
                 [
+                    'label' => 'label.quantity',
                     'constraints' => [
-                        new GreaterThan(['value' => 0])
+                        new NotBlank(),
+                        new GreaterThan(['value' => 0]),
+                        new LessThan(['value' => 50]),
                     ]
                 ]
             )
@@ -32,8 +37,11 @@ class CodeForm extends AbstractType
                 'length',
                 IntegerType::class,
                 [
+                    'label' => 'label.length',
                     'constraints' => [
-                        new GreaterThan(['value' => 0])
+                        new NotBlank(),
+                        new GreaterThan(['value' => 0]),
+                        new LessThan(['value' => 50]),
                     ]
                 ]
             )
@@ -41,17 +49,19 @@ class CodeForm extends AbstractType
                 'type',
                 ChoiceType::class,
                 [
+                    'label' => 'label.type',
                     'choices' => [
-                        'digits' => 0,
-                        'digits_and_letters' => 1
+                        'label.digits_and_letters' => 0,
+                        'label.digits' => 1
                     ]
                 ]
             )
-            ->add('submit', SubmitType::class);
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return '';
+            ->add(
+                'generate',
+                SubmitType::class,
+                [
+                    'label' => 'label.generate',
+                ]
+            );
     }
 }

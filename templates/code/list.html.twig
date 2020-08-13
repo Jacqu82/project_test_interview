@@ -4,8 +4,10 @@
 
     <h3>Generate Code</h3>
 
-    {{ form_start(form) }}
-    {{ form_row(form) }}
+    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+    {{ form_row(form.quantity) }}
+    {{ form_row(form.length) }}
+    {{ form_row(form.type) }}
     {{ form_end(form) }}
 
     {% if codes is not empty %}

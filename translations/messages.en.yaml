@@ -1,0 +1,7 @@
+label:
+    quantity: Quantity
+    length: Length
+    type: Type
+    generate: Generate
+    digits_and_letters: Digits and letters
+    digits: Digits
