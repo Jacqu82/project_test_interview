@@ -38,7 +38,7 @@ class GenerateCodeCommand extends Command
             ->addArgument(
                 'type',
                 InputArgument::OPTIONAL,
-                'Code\'s type - 0 generates digits and letters, 1 digits only',
+                'Code\'s type - option "0" generates digits and letters, option "1" digits only',
                 0
             );
     }
@@ -47,21 +47,21 @@ class GenerateCodeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $length = $input->getArgument('length');
-        $quantity = $input->getArgument('quantity');
-        $type = $input->getArgument('type');
+        $quantity = (int)$input->getArgument('quantity');
+        $length = (int)$input->getArgument('length');
+        $type = (int)$input->getArgument('type');
 
         $codes = $this->codeProvider->generateRandomCodeList($length, $quantity, $type);
-
-        if ($length) {
-            $io->note(sprintf('Length: %s', $length));
-        }
 
         if ($quantity) {
             $io->note(sprintf('Quantity: %s', $quantity));
         }
 
-        $io->note(sprintf('Type: %s', 0 === $type ? 'digits and letters' : 'digits'));
+        if ($length) {
+            $io->note(sprintf('Length: %s', $length));
+        }
+
+        $io->note(sprintf('Type: %s', 0 === $type ? 'Digits and letters' : 'Digits'));
 
         if (!empty($codes)) {
             if (!file_exists($this->varDirectory) && !mkdir(
@@ -77,7 +77,7 @@ class GenerateCodeCommand extends Command
                 implode(PHP_EOL, $codes)
             );
 
-            $io->success(sprintf('Codes successfully generated and saved:%s %s', PHP_EOL, implode(', ', $codes)));
+            $io->success(sprintf('Code(s) successfully generated and saved:%s %s', PHP_EOL, implode(', ', $codes)));
         }
     }
 }

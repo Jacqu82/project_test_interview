@@ -16,7 +16,7 @@ class CodeProvider
             for ($i = 1; $i <= $quantity; $i++) {
                 $list[] = $this->randomDigitString($length);
             }
-        } else {
+        } elseif (0 === $type) {
             for ($i = 1; $i <= $quantity; $i++) {
                 $list[] = $this->randomLetterAndDigitString($length);
             }
