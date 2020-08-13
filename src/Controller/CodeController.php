@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\CodeForm;
-use App\Provider\CodeProvider;
+use App\Provider\CodeListProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CodeController extends AbstractController
 {
-    private $codeProvider;
+    private $codeListProvider;
 
-    public function __construct(CodeProvider $codeProvider)
+    public function __construct(CodeListProvider $codeListProvider)
     {
-        $this->codeProvider = $codeProvider;
+        $this->codeListProvider = $codeListProvider;
     }
 
     /**
@@ -33,7 +33,7 @@ class CodeController extends AbstractController
         $codes = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $codes = $this->codeProvider->generateRandomCodeList(
+            $codes = $this->codeListProvider->generateRandomCodeList(
                 $form->get('length')->getData(),
                 $form->get('quantity')->getData(),
                 $form->get('type')->getData()

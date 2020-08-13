@@ -30,7 +30,8 @@ class CodeForm extends AbstractType
                         new NotBlank(),
                         new GreaterThan(['value' => 0]),
                         new LessThan(['value' => 50]),
-                    ]
+                    ],
+                    'help' => 'label.enter_the_number_of_codes',
                 ]
             )
             ->add(
@@ -42,7 +43,8 @@ class CodeForm extends AbstractType
                         new NotBlank(),
                         new GreaterThan(['value' => 0]),
                         new LessThan(['value' => 50]),
-                    ]
+                    ],
+                    'help' => 'label.enter_the_length_of_code',
                 ]
             )
             ->add(
@@ -51,9 +53,12 @@ class CodeForm extends AbstractType
                 [
                     'label' => 'label.type',
                     'choices' => [
-                        'label.digits_and_letters' => 0,
-                        'label.digits' => 1
-                    ]
+                        'label.digits_and_letters' => false,
+                        'label.digits' => true
+                    ],
+                    'expanded' => true,
+                    'data' => false,
+                    'help' => 'label.select_a_code_type',
                 ]
             )
             ->add(

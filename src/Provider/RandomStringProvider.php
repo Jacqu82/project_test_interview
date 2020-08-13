@@ -7,25 +7,9 @@ namespace App\Provider;
 /**
  * @author Jacek Wesołowski <jacqu25@yahoo.com>
  */
-class CodeProvider
+class RandomStringProvider
 {
-    public function generateRandomCodeList(int $length, int $quantity, int $type): array
-    {
-        $list = [];
-        if (1 === $type) {
-            for ($i = 1; $i <= $quantity; $i++) {
-                $list[] = $this->randomDigitString($length);
-            }
-        } elseif (0 === $type) {
-            for ($i = 1; $i <= $quantity; $i++) {
-                $list[] = $this->randomLetterAndDigitString($length);
-            }
-        }
-
-        return $list;
-    }
-
-    private function randomLetterAndDigitString(int $length): string
+    public function randomLetterAndDigitString(int $length): string
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
@@ -37,7 +21,7 @@ class CodeProvider
         return $randomString;
     }
 
-    private function randomDigitString(int $length): string
+    public function randomDigitString(int $length): string
     {
         $characters = '0123456789';
         $randomString = '';

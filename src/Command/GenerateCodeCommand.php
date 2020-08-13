@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
-use App\Provider\CodeProvider;
+use App\Provider\CodeListProvider;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,13 +19,13 @@ class GenerateCodeCommand extends Command
 {
     protected static $defaultName = 'app:generate-code';
 
-    private $codeProvider;
+    private $codeListProvider;
 
     private $varDirectory;
 
-    public function __construct(CodeProvider $codeProvider, string $varDirectory)
+    public function __construct(CodeListProvider $codeListProvider, string $varDirectory)
     {
-        $this->codeProvider = $codeProvider;
+        $this->codeListProvider = $codeListProvider;
         $this->varDirectory = $varDirectory;
 
         parent::__construct();
@@ -47,21 +49,19 @@ class GenerateCodeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        if (0 !== (int)$input->getArgument('type') && 1 !== (int)$input->getArgument('type')) {
+            return;
+        }
+
         $quantity = (int)$input->getArgument('quantity');
         $length = (int)$input->getArgument('length');
-        $type = (int)$input->getArgument('type');
+        $type = (bool)$input->getArgument('type');
 
-        $codes = $this->codeProvider->generateRandomCodeList($length, $quantity, $type);
+        $codes = $this->codeListProvider->generateRandomCodeList($length, $quantity, $type);
 
-        if ($quantity) {
-            $io->note(sprintf('Quantity: %s', $quantity));
-        }
-
-        if ($length) {
-            $io->note(sprintf('Length: %s', $length));
-        }
-
-        $io->note(sprintf('Type: %s', 0 === $type ? 'Digits and letters' : 'Digits'));
+        $io->note(sprintf('Quantity: %s', $quantity));
+        $io->note(sprintf('Length: %s', $length));
+        $io->note(sprintf('Type: %s', false === $type ? 'Digits and letters' : 'Digits'));
 
         if (!empty($codes)) {
             if (!file_exists($this->varDirectory) && !mkdir(
